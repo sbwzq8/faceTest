@@ -12,6 +12,7 @@ using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
 
 namespace FaceTutorial
 {
@@ -89,22 +90,26 @@ namespace FaceTutorial
 
                     Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
                     Image imageBackground = (Image)bitmap2;
-                    Image imageOverlay = Image.FromFile("santa.png");
+                    Image rawImageOverlay = Image.FromFile("santa2.png");
+                    //Image imageOverlay = Image.FromFile("santa2.png");
+                    //Image imageOverlay = ResizeImage(rawImageOverlay, face.FaceRectangle.Width, face.FaceRectangle.Height);
+                    Image imageOverlay = ResizeImage(rawImageOverlay, face.FaceRectangle.Width, rawImageOverlay.Height);
+
                     Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
 
                     using (Graphics gr = Graphics.FromImage(img))
                     {
                         gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));
-                        gr.DrawImage(imageOverlay, new System.Drawing.Point(0, 0));
+                        gr.DrawImage(imageOverlay, new System.Drawing.Point((face.FaceRectangle.Left - 100), face.FaceRectangle.Top));
+                        
                     }
-                    img.Save("output.png", ImageFormat.Png);
+                    img.Save("output" /*+ i*/ + ".png", ImageFormat.Png);
+                    
 
 
 
 
-
-
-
+                    
 
 
 
@@ -146,6 +151,7 @@ namespace FaceTutorial
                     PixelFormats.Pbgra32);
 
                 faceWithRectBitmap.Render(visual);
+                //FacePhoto.Source = bitmapSource;
                 FacePhoto.Source = faceWithRectBitmap;
             }
         }
@@ -231,6 +237,31 @@ namespace FaceTutorial
 
                 return new Bitmap(bitmap);
             }
+        }
+
+        public static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
         }
     }
 }
