@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 using Microsoft.ProjectOxford.Common.Contract;
 using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
-//using System.Drawing;
+using System.Drawing;
 using System.Drawing.Imaging;
 
 namespace FaceTutorial
@@ -86,21 +86,46 @@ namespace FaceTutorial
                 {
                     Face face = faces[i];
 
-                    /*Image imageBackground = Image.FromFile("bitmap1.png");
+
+                    Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
+                    Image imageBackground = (Image)bitmap2;
+                    Image imageOverlay = Image.FromFile("snap.png");
+                    Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
+
+                    using (Graphics gr = Graphics.FromImage(img))
+                    {
+                        gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));
+                        gr.DrawImage(imageOverlay, new System.Drawing.Point(0, 0));
+                    }
+                    img.Save("output.png", ImageFormat.Png);
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    /*Image imageBackground = bitmapSource;
                     Image imageOverlay = Image.FromFile("bitmap2.png");
 
                     Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
                     using (Graphics gr = Graphics.FromImage(img))
                     {
-                        gr.DrawImage(imageBackground, new Point(0, 0));
-                        gr.DrawImage(imageOverlay, new Point(0, 0));
+                        gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));
+                        gr.DrawImage(imageOverlay, new System.Drawing.Point(0, 0));
                     }
                     img.Save("output.png", ImageFormat.Png);*/
 
                     // Draw a rectangle on the face.
                     drawingContext.DrawRectangle(
-                        Brushes.Transparent,
-                        new Pen(Brushes.Red, 2),
+                        System.Windows.Media.Brushes.Transparent,
+                        new System.Windows.Media.Pen(System.Windows.Media.Brushes.Red, 2),
                         new Rect(
                             face.FaceRectangle.Left * resizeFactor,
                             face.FaceRectangle.Top * resizeFactor,
@@ -134,7 +159,7 @@ namespace FaceTutorial
                 return;
 
             // Find the mouse position relative to the image.
-            Point mouseXY = e.GetPosition(FacePhoto);
+            System.Windows.Point mouseXY = e.GetPosition(FacePhoto);
 
             ImageSource imageSource = FacePhoto.Source;
             BitmapSource bitmapSource = (BitmapSource)imageSource;
@@ -190,6 +215,21 @@ namespace FaceTutorial
             {
                 MessageBox.Show(e.Message, "Error");
                 return new Face[0];
+            }
+        }
+
+        private Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
+        {
+            // BitmapImage bitmapImage = new BitmapImage(new Uri("../Images/test.png", UriKind.Relative));
+
+            using (MemoryStream outStream = new MemoryStream())
+            {
+                BitmapEncoder enc = new BmpBitmapEncoder();
+                enc.Frames.Add(BitmapFrame.Create(bitmapImage));
+                enc.Save(outStream);
+                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(outStream);
+
+                return new Bitmap(bitmap);
             }
         }
     }
