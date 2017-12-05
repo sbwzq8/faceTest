@@ -89,7 +89,7 @@ namespace FaceTutorial
 
                     Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
                     Image imageBackground = (Image)bitmap2;
-                    Image imageOverlay = Image.FromFile("snap.png");
+                    Image imageOverlay = Image.FromFile("santa.png");
                     Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
 
                     using (Graphics gr = Graphics.FromImage(img))
