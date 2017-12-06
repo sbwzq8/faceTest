@@ -90,17 +90,17 @@ namespace FaceTutorial
 
                     Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
                     Image imageBackground = (Image)bitmap2;
-                    Image rawImageOverlay = Image.FromFile("santa2.png");
+                    Image rawImageOverlay = Image.FromFile("snap.png");
                     //Image imageOverlay = Image.FromFile("santa2.png");
                     //Image imageOverlay = ResizeImage(rawImageOverlay, face.FaceRectangle.Width, face.FaceRectangle.Height);
-                    Image imageOverlay = ResizeImage(rawImageOverlay, face.FaceRectangle.Width, rawImageOverlay.Height);
+                    Image imageOverlay = ResizeImage(rawImageOverlay, (int) (rawImageOverlay.Width * .4), (int) (rawImageOverlay.Height * .4));
 
                     Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
 
                     using (Graphics gr = Graphics.FromImage(img))
                     {
                         gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));
-                        gr.DrawImage(imageOverlay, new System.Drawing.Point((face.FaceRectangle.Left - 100), face.FaceRectangle.Top));
+                        gr.DrawImage(imageOverlay, new System.Drawing.Point((face.FaceRectangle.Left - (face.FaceRectangle.Width / 2) ), face.FaceRectangle.Top - (face.FaceRectangle.Height /2) ));
                         
                     }
                     img.Save("output" /*+ i*/ + ".png", ImageFormat.Png);
