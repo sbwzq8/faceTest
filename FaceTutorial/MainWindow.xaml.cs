@@ -83,38 +83,49 @@ namespace FaceTutorial
                 double dpi = bitmapSource.DpiX;
                 resizeFactor = 96 / dpi;
 
+                Image img;
+                Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
+                Image imageBackground = (Image)bitmap2;
                 for (int i = 0; i < faces.Length; ++i)
                 {
                     Face face = faces[i];
 
 
-                    Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
-                    Image imageBackground = (Image)bitmap2;
-                    Image rawImageOverlay = Image.FromFile("snap.png");
-                    //Image imageOverlay = Image.FromFile("santa2.png");
-                    //Image imageOverlay = ResizeImage(rawImageOverlay, face.FaceRectangle.Width, face.FaceRectangle.Height);
-                    Image imageOverlay = ResizeImage(rawImageOverlay, (int) (rawImageOverlay.Width * .4), (int) (rawImageOverlay.Height * .4));
+                  //  Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
+                  //  Image imageBackground = (Image)bitmap2;
+                    Image rawImageOverlay = Image.FromFile("glasses.png");
+                    
 
-                    Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
+                    double ratiox = rawImageOverlay.Width;
+                    double ratioy = rawImageOverlay.Height;
+
+                    double ratio = ratioy / ratiox;
+
+                    double resize = face.FaceRectangle.Height * ratio;
+
+
+
+
+                    // face.FaceRectangle.Width, face.FaceRectangle.Height * (int)ratio)
+                    //Image imageOverlay = Image.FromFile("santa2.png");
+                    Image imageOverlay = ResizeImage(rawImageOverlay, face.FaceRectangle.Width,(int)resize);
+                    //Image imageOverlay = ResizeImage(rawImageOverlay, (int) (rawImageOverlay.Width * .4), (int) (rawImageOverlay.Height * .4));
+                    
+                    img = new Bitmap(imageBackground.Width, imageBackground.Height);
 
                     using (Graphics gr = Graphics.FromImage(img))
                     {
                         gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));
-                        gr.DrawImage(imageOverlay, new System.Drawing.Point((face.FaceRectangle.Left - (face.FaceRectangle.Width / 2) ), face.FaceRectangle.Top - (face.FaceRectangle.Height /2) ));
-                        
+                        //gr.DrawImage(imageOverlay, face.FaceRectangle.Left, face.FaceRectangle.Top);
+                        //gr.DrawImage(imageOverlay, new System.Drawing.Point((face.FaceRectangle.Left - (face.FaceRectangle.Width / 2) ), face.FaceRectangle.Top - (face.FaceRectangle.Height /2) ));
+                        //gr.DrawImage(imageOverlay, (face.FaceRectangle.Left + (face.FaceRectangle.Width/2) ) - (imageOverlay.Width/2), (face.FaceRectangle.Top + (face.FaceRectangle.Height/2) ) - (imageOverlay.Height/2) );
+                        gr.DrawImage(imageOverlay, (face.FaceRectangle.Left - (face.FaceRectangle.Width/2) - 30 ) /*- (imageOverlay.Width/2)*/, (face.FaceRectangle.Top - (face.FaceRectangle.Height/2) ) - (imageOverlay.Height/2) + 20 );
                     }
-                    img.Save("output" /*+ i*/ + ".png", ImageFormat.Png);
-                    
-
-
-
+                    img.Save("output1" /*+ i*/ + ".png", ImageFormat.Png);
 
                     
 
-
-
-
-
+                    
 
                     /*Image imageBackground = bitmapSource;
                     Image imageOverlay = Image.FromFile("bitmap2.png");
@@ -152,7 +163,17 @@ namespace FaceTutorial
 
                 faceWithRectBitmap.Render(visual);
                 //FacePhoto.Source = bitmapSource;
-                FacePhoto.Source = faceWithRectBitmap;
+                //FacePhoto.Source = faceWithRectBitmap;
+
+                Uri outputUri = new Uri(@"C:\Users\MiniTron\source\repos\FaceTutorial\FaceTutorial\bin\Debug\output1.png");
+                BitmapImage outputBitmap = new BitmapImage();
+
+                outputBitmap.BeginInit();
+                outputBitmap.CacheOption = BitmapCacheOption.None;
+                outputBitmap.UriSource = outputUri;
+                outputBitmap.EndInit();
+
+                FacePhoto.Source = outputBitmap;
             }
         }
 
