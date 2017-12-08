@@ -13,6 +13,7 @@ using Microsoft.ProjectOxford.Face.Contract;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.Windows.Interop;
 
 namespace FaceTutorial
 {
@@ -83,60 +84,57 @@ namespace FaceTutorial
                 double dpi = bitmapSource.DpiX;
                 resizeFactor = 96 / dpi;
 
-                Image img;
                 Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
                 Image imageBackground = (Image)bitmap2;
+                Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
                 for (int i = 0; i < faces.Length; ++i)
                 {
                     Face face = faces[i];
-
-
-                  //  Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
-                  //  Image imageBackground = (Image)bitmap2;
-                    Image rawImageOverlay = Image.FromFile("glasses.png");
                     
+
+                    //Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
+                    //Image imageBackground = (Image)bitmap2;
+                    Image rawImageOverlay = Image.FromFile("glasses.png");
 
                     double ratiox = rawImageOverlay.Width;
                     double ratioy = rawImageOverlay.Height;
-
                     double ratio = ratioy / ratiox;
-
                     double resize = face.FaceRectangle.Height * ratio;
+
+                    Image imageOverlay = ResizeImage(rawImageOverlay, 299, 299);
+
+                    string path = System.IO.Path.Combine(Environment.CurrentDirectory, "snap.png");
+                    BitmapImage myBitmapImage = new BitmapImage();
+                    myBitmapImage.BeginInit();
+                    myBitmapImage.UriSource = new Uri(path);
+                    myBitmapImage.DecodePixelWidth = (int) (face.FaceRectangle.Width * 1.8);
+
+                    myBitmapImage.EndInit();
+
+                    Bitmap filterBitmap = BitmapImage2Bitmap(myBitmapImage);
+                    filterBitmap.MakeTransparent();
 
 
 
 
                     // face.FaceRectangle.Width, face.FaceRectangle.Height * (int)ratio)
                     //Image imageOverlay = Image.FromFile("santa2.png");
-                    Image imageOverlay = ResizeImage(rawImageOverlay, face.FaceRectangle.Width,(int)resize);
-                    //Image imageOverlay = ResizeImage(rawImageOverlay, (int) (rawImageOverlay.Width * .4), (int) (rawImageOverlay.Height * .4));
-                    
-                    img = new Bitmap(imageBackground.Width, imageBackground.Height);
+                    //Image imageOverlay = ResizeImage(rawImageOverlay, face.FaceRectangle.Width,(int)resize);
+                    //Image imageOverlay = ResizeImage(rawImageOverlay, face.FaceRectangle.Width,face.FaceRectangle.Height);
+                    //Bitmap imageOverlay = (Bitmap)rawImageOverlay;
+
 
                     using (Graphics gr = Graphics.FromImage(img))
                     {
                         gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));
-                        //gr.DrawImage(imageOverlay, face.FaceRectangle.Left, face.FaceRectangle.Top);
-                        //gr.DrawImage(imageOverlay, new System.Drawing.Point((face.FaceRectangle.Left - (face.FaceRectangle.Width / 2) ), face.FaceRectangle.Top - (face.FaceRectangle.Height /2) ));
-                        //gr.DrawImage(imageOverlay, (face.FaceRectangle.Left + (face.FaceRectangle.Width/2) ) - (imageOverlay.Width/2), (face.FaceRectangle.Top + (face.FaceRectangle.Height/2) ) - (imageOverlay.Height/2) );
-                        gr.DrawImage(imageOverlay, (face.FaceRectangle.Left - (face.FaceRectangle.Width/2) - 30 ) /*- (imageOverlay.Width/2)*/, (face.FaceRectangle.Top - (face.FaceRectangle.Height/2) ) - (imageOverlay.Height/2) + 20 );
+                        //gr.DrawImage(filterBitmap, face.FaceRectangle.Left, face.FaceRectangle.Top);
+                        //gr.DrawImage(imageOverlay, face.FaceRectangle.Left - face.FaceRectangle.Width/2, face.FaceRectangle.Top - face.FaceRectangle.Height/2);
+                        //gr.DrawImage(rawImageOverlay, new System.Drawing.Point((face.FaceRectangle.Left - (face.FaceRectangle.Width / 2) ), face.FaceRectangle.Top - (face.FaceRectangle.Height /2) ));
+                        gr.DrawImage(filterBitmap, (face.FaceRectangle.Left + (face.FaceRectangle.Width/2) ) - (filterBitmap.Width/2), (face.FaceRectangle.Top + (face.FaceRectangle.Height/2) ) - (filterBitmap.Height/2) );
+                        //gr.DrawImage(imageOverlay, (face.FaceRectangle.Left - (face.FaceRectangle.Width/2) - 30 ) /*- (imageOverlay.Width/2)*/, (face.FaceRectangle.Top - (face.FaceRectangle.Height/2) ) - (imageOverlay.Height/2) + 20 );
                     }
                     img.Save("output1" /*+ i*/ + ".png", ImageFormat.Png);
-
                     
-
-                    
-
-                    /*Image imageBackground = bitmapSource;
-                    Image imageOverlay = Image.FromFile("bitmap2.png");
-
-                    Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
-                    using (Graphics gr = Graphics.FromImage(img))
-                    {
-                        gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));
-                        gr.DrawImage(imageOverlay, new System.Drawing.Point(0, 0));
-                    }
-                    img.Save("output.png", ImageFormat.Png);*/
 
                     // Draw a rectangle on the face.
                     drawingContext.DrawRectangle(
@@ -260,6 +258,29 @@ namespace FaceTutorial
             }
         }
 
+        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
+        public static extern bool DeleteObject(IntPtr hObject);
+        private BitmapImage Bitmap2BitmapImage(Bitmap bitmap)
+        {
+            IntPtr hBitmap = bitmap.GetHbitmap();
+            BitmapImage retval;
+
+            try
+            {
+                retval = (BitmapImage)Imaging.CreateBitmapSourceFromHBitmap(
+                             hBitmap,
+                             IntPtr.Zero,
+                             Int32Rect.Empty,
+                             BitmapSizeOptions.FromEmptyOptions());
+            }
+            finally
+            {
+                DeleteObject(hBitmap);
+            }
+
+            return retval;
+        }
+
         public static Bitmap ResizeImage(Image image, int width, int height)
         {
             var destRect = new Rectangle(0, 0, width, height);
@@ -286,3 +307,36 @@ namespace FaceTutorial
         }
     }
 }
+/*Image imageBackground = bitmapSource;
+Image imageOverlay = Image.FromFile("bitmap2.png");
+
+Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
+using (Graphics gr = Graphics.FromImage(img))
+{
+    gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));
+    gr.DrawImage(imageOverlay, new System.Drawing.Point(0, 0));
+}
+img.Save("output.png", ImageFormat.Png);*/
+
+//string path = System.IO.Path.Combine(Environment.CurrentDirectory, "glasses.png");
+//BitmapImage myBitmapImage = new BitmapImage();
+//myBitmapImage.BeginInit();
+//myBitmapImage.UriSource = new Uri(path);
+//myBitmapImage.DecodePixelWidth = face.FaceRectangle.Width;
+
+//myBitmapImage.EndInit();
+
+//Image filterBitmap = BitmapImage2Bitmap(myBitmapImage);
+
+//float width = 299;
+//float height = 299;
+//var brush = new SolidBrush(System.Drawing.Color.Black);
+//var image = new Bitmap("glasses.png");
+//float scale = Math.Min(width / image.Width, height / image.Height);
+//Bitmap bmp = new Bitmap((int)width, (int)height);
+//bmp.MakeTransparent();
+//                    var graph = Graphics.FromImage(bmp);
+//var scaleWidth = (int)(image.Width * scale);
+//var scaleHeight = (int)(image.Height * scale);
+//graph.FillRectangle(brush, new RectangleF(0, 0, width, height));
+//                    graph.DrawImage(image, new Rectangle(((int) width - scaleWidth) / 2, ((int) height - scaleHeight) / 2, scaleWidth, scaleHeight));
