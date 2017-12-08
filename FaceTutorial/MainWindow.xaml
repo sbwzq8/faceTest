@@ -5,10 +5,9 @@
     <Grid x:Name="BackPanel">
         <Image x:Name="FacePhoto" Stretch="Uniform" Margin="0,0,0,50" MouseMove="FacePhoto_MouseMove"/>
         <DockPanel DockPanel.Dock="Bottom">
-            <Button x:Name="BrowseButton" Width="72" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left"
+            <Button x:Name="BrowseButton" Width="100" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="center"
                     Content="Browse..."
                     Click="BrowseButton_Click" />
-            <Border BorderBrush="Black" BorderThickness="1" Height="299" Margin="0,155,0,0" VerticalAlignment="Top" Width="299"/>
         </DockPanel>
     </Grid>
 </Window>

@@ -86,22 +86,10 @@ namespace FaceTutorial
 
                 Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
                 Image imageBackground = (Image)bitmap2;
-                Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
+                Image img = null;
                 for (int i = 0; i < faces.Length; ++i)
                 {
                     Face face = faces[i];
-                    
-
-                    //Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
-                    //Image imageBackground = (Image)bitmap2;
-                    Image rawImageOverlay = Image.FromFile("glasses.png");
-
-                    double ratiox = rawImageOverlay.Width;
-                    double ratioy = rawImageOverlay.Height;
-                    double ratio = ratioy / ratiox;
-                    double resize = face.FaceRectangle.Height * ratio;
-
-                    Image imageOverlay = ResizeImage(rawImageOverlay, 299, 299);
 
                     string path = System.IO.Path.Combine(Environment.CurrentDirectory, "snap.png");
                     BitmapImage myBitmapImage = new BitmapImage();
@@ -114,56 +102,17 @@ namespace FaceTutorial
                     Bitmap filterBitmap = BitmapImage2Bitmap(myBitmapImage);
                     filterBitmap.MakeTransparent();
 
-
-
-
-                    // face.FaceRectangle.Width, face.FaceRectangle.Height * (int)ratio)
-                    //Image imageOverlay = Image.FromFile("santa2.png");
-                    //Image imageOverlay = ResizeImage(rawImageOverlay, face.FaceRectangle.Width,(int)resize);
-                    //Image imageOverlay = ResizeImage(rawImageOverlay, face.FaceRectangle.Width,face.FaceRectangle.Height);
-                    //Bitmap imageOverlay = (Bitmap)rawImageOverlay;
-
-
-                    using (Graphics gr = Graphics.FromImage(img))
+                    using (Graphics gr = Graphics.FromImage(imageBackground))
                     {
                         gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));
-                        //gr.DrawImage(filterBitmap, face.FaceRectangle.Left, face.FaceRectangle.Top);
-                        //gr.DrawImage(imageOverlay, face.FaceRectangle.Left - face.FaceRectangle.Width/2, face.FaceRectangle.Top - face.FaceRectangle.Height/2);
-                        //gr.DrawImage(rawImageOverlay, new System.Drawing.Point((face.FaceRectangle.Left - (face.FaceRectangle.Width / 2) ), face.FaceRectangle.Top - (face.FaceRectangle.Height /2) ));
-                        gr.DrawImage(filterBitmap, (face.FaceRectangle.Left + (face.FaceRectangle.Width/2) ) - (filterBitmap.Width/2), (face.FaceRectangle.Top + (face.FaceRectangle.Height/2) ) - (filterBitmap.Height/2) );
-                        //gr.DrawImage(imageOverlay, (face.FaceRectangle.Left - (face.FaceRectangle.Width/2) - 30 ) /*- (imageOverlay.Width/2)*/, (face.FaceRectangle.Top - (face.FaceRectangle.Height/2) ) - (imageOverlay.Height/2) + 20 );
+                        gr.DrawImage(filterBitmap, (face.FaceRectangle.Left + (face.FaceRectangle.Width / 2)) - (filterBitmap.Width / 2), (face.FaceRectangle.Top + (face.FaceRectangle.Height / 2)) - (filterBitmap.Height / 2));
+                        imageBackground.Save("output2" /*+ i*/ + ".png", ImageFormat.Png);
                     }
-                    img.Save("output1" /*+ i*/ + ".png", ImageFormat.Png);
-                    
-
-                    // Draw a rectangle on the face.
-                    drawingContext.DrawRectangle(
-                        System.Windows.Media.Brushes.Transparent,
-                        new System.Windows.Media.Pen(System.Windows.Media.Brushes.Red, 2),
-                        new Rect(
-                            face.FaceRectangle.Left * resizeFactor,
-                            face.FaceRectangle.Top * resizeFactor,
-                            face.FaceRectangle.Width * resizeFactor,
-                            face.FaceRectangle.Height * resizeFactor
-                            )
-                    );
                 }
 
                 drawingContext.Close();
 
-                // Display the image with the rectangle around the face.
-                RenderTargetBitmap faceWithRectBitmap = new RenderTargetBitmap(
-                    (int)(bitmapSource.PixelWidth * resizeFactor),
-                    (int)(bitmapSource.PixelHeight * resizeFactor),
-                    96,
-                    96,
-                    PixelFormats.Pbgra32);
-
-                faceWithRectBitmap.Render(visual);
-                //FacePhoto.Source = bitmapSource;
-                //FacePhoto.Source = faceWithRectBitmap;
-
-                Uri outputUri = new Uri(@"C:\Users\MiniTron\source\repos\FaceTutorial\FaceTutorial\bin\Debug\output1.png");
+                Uri outputUri = new Uri(@"C:\Users\MiniTron\source\repos\FaceTutorial\FaceTutorial\bin\Debug\output2.png");
                 BitmapImage outputBitmap = new BitmapImage();
 
                 outputBitmap.BeginInit();
@@ -340,3 +289,38 @@ img.Save("output.png", ImageFormat.Png);*/
 //var scaleHeight = (int)(image.Height * scale);
 //graph.FillRectangle(brush, new RectangleF(0, 0, width, height));
 //                    graph.DrawImage(image, new Rectangle(((int) width - scaleWidth) / 2, ((int) height - scaleHeight) / 2, scaleWidth, scaleHeight));
+
+//Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
+//Image imageBackground = (Image)bitmap2;
+//Image rawImageOverlay = Image.FromFile("glasses.png");
+
+//double ratiox = rawImageOverlay.Width;
+//double ratioy = rawImageOverlay.Height;
+//double ratio = ratioy / ratiox;
+//double resize = face.FaceRectangle.Height * ratio;
+
+//Image imageOverlay = ResizeImage(rawImageOverlay, 299, 299);
+
+// Draw a rectangle on the face.
+//drawingContext.DrawRectangle(
+//    System.Windows.Media.Brushes.Transparent,
+//                        new System.Windows.Media.Pen(System.Windows.Media.Brushes.Red, 2),
+//                        new Rect(
+//                            face.FaceRectangle.Left* resizeFactor,
+//                            face.FaceRectangle.Top* resizeFactor,
+//                            face.FaceRectangle.Width* resizeFactor,
+//                            face.FaceRectangle.Height* resizeFactor
+//                            )
+//                    );
+
+//// Display the image with the rectangle around the face.
+//RenderTargetBitmap faceWithRectBitmap = new RenderTargetBitmap(
+//    (int)(bitmapSource.PixelWidth * resizeFactor),
+//    (int)(bitmapSource.PixelHeight * resizeFactor),
+//    96,
+//    96,
+//    PixelFormats.Pbgra32);
+
+//faceWithRectBitmap.Render(visual);
+//FacePhoto.Source = bitmapSource;
+//FacePhoto.Source = faceWithRectBitmap;
