@@ -33,6 +33,7 @@ namespace FaceTutorial
             new FaceServiceClient("b17c9821ee20450f88f2f7e28107de9a", "https://westcentralus.api.cognitive.microsoft.com/face/v1.0");
 
         Face[] faces;                   // The list of detected faces.
+        List<Face> faceList = new List<Face>();
         double resizeFactor;            // The resize factor for the displayed image.
 
         public MainWindow()
@@ -76,6 +77,12 @@ namespace FaceTutorial
 
             if (faces.Length > 0)
             {
+                foreach(Face face in faces)
+                {
+                    faceList.Add(face);
+                }
+                faceList.Reverse();
+
                 // Prepare to draw rectangles around the faces.
                 DrawingVisual visual = new DrawingVisual();
                 DrawingContext drawingContext = visual.RenderOpen();
@@ -87,11 +94,12 @@ namespace FaceTutorial
                 Bitmap bitmap2 = BitmapImage2Bitmap(bitmapSource);
                 Image imageBackground = (Image)bitmap2;
                 Image img = null;
+                
                 for (int i = 0; i < faces.Length; ++i)
                 {
-                    Face face = faces[i];
+                    Face face = faceList[i];
 
-                    string path = System.IO.Path.Combine(Environment.CurrentDirectory, "snap.png");
+                    string path = System.IO.Path.Combine(Environment.CurrentDirectory, "snap2.png");
                     BitmapImage myBitmapImage = new BitmapImage();
                     myBitmapImage.BeginInit();
                     myBitmapImage.UriSource = new Uri(path);
