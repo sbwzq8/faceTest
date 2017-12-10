@@ -82,7 +82,7 @@ namespace FaceTutorial
                     faceList.Add(face);
                 }
                 faceList.Reverse();
-
+                
                 // Prepare to draw rectangles around the faces.
                 DrawingVisual visual = new DrawingVisual();
                 DrawingContext drawingContext = visual.RenderOpen();
@@ -95,6 +95,7 @@ namespace FaceTutorial
                 Image imageBackground = (Image)bitmap2;
                 Image img = null;
                 
+                
                 for (int i = 0; i < faces.Length; ++i)
                 {
                     Face face = faceList[i];
@@ -103,7 +104,7 @@ namespace FaceTutorial
                     BitmapImage myBitmapImage = new BitmapImage();
                     myBitmapImage.BeginInit();
                     myBitmapImage.UriSource = new Uri(path);
-                    myBitmapImage.DecodePixelWidth = (int) (face.FaceRectangle.Width * 1.8);
+                    myBitmapImage.DecodePixelWidth = (int) (face.FaceRectangle.Width * 1.6);
 
                     myBitmapImage.EndInit();
 
@@ -112,15 +113,14 @@ namespace FaceTutorial
 
                     using (Graphics gr = Graphics.FromImage(imageBackground))
                     {
-                        gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));
-                        gr.DrawImage(filterBitmap, (face.FaceRectangle.Left + (face.FaceRectangle.Width / 2)) - (filterBitmap.Width / 2), (face.FaceRectangle.Top + (face.FaceRectangle.Height / 2)) - (filterBitmap.Height / 2));
+                        gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));gr.DrawImage(filterBitmap, (face.FaceRectangle.Left + (face.FaceRectangle.Width / 2)) - (filterBitmap.Width / 2), (face.FaceRectangle.Top + (face.FaceRectangle.Height / 2)) - (filterBitmap.Height / 2));
                         imageBackground.Save("output2" /*+ i*/ + ".png", ImageFormat.Png);
                     }
                 }
 
                 drawingContext.Close();
 
-                Uri outputUri = new Uri(@"C:\Users\MiniTron\source\repos\FaceTutorial\FaceTutorial\bin\Debug\output2.png");
+                Uri outputUri = new Uri(Directory.GetCurrentDirectory() + "/output2.png");
                 BitmapImage outputBitmap = new BitmapImage();
 
                 outputBitmap.BeginInit();
