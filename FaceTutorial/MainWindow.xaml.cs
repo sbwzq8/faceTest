@@ -36,6 +36,8 @@ namespace FaceTutorial
         List<Face> faceList = new List<Face>();
         double resizeFactor;            // The resize factor for the displayed image.
 
+        const double FILTER_RESIZE_FACTOR = 1.6;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -59,6 +61,23 @@ namespace FaceTutorial
 
             // Display the image file.
             string filePath = openDlg.FileName;
+
+            MessageBox.Show("Now Pick A Filter!");
+
+            // Get the image file to scan from the user.
+            openDlg = new Microsoft.Win32.OpenFileDialog();
+            openDlg.Filter = "PNG Image(*.png)|*.png";
+
+            result = openDlg.ShowDialog(this);
+
+            // Return if canceled.
+            if (!(bool)result)
+            {
+                return;
+            }
+
+            // Display the image file.
+            string filterFilePath = openDlg.FileName;
 
             Uri fileUri = new Uri(filePath);
             BitmapImage bitmapSource = new BitmapImage();
@@ -100,11 +119,12 @@ namespace FaceTutorial
                 {
                     Face face = faceList[i];
 
-                    string path = System.IO.Path.Combine(Environment.CurrentDirectory, "snap2.png");
+                    string path = filterFilePath;
+                    //string path = System.IO.Path.Combine(Environment.CurrentDirectory, "snap2.png");
                     BitmapImage myBitmapImage = new BitmapImage();
                     myBitmapImage.BeginInit();
                     myBitmapImage.UriSource = new Uri(path);
-                    myBitmapImage.DecodePixelWidth = (int) (face.FaceRectangle.Width * 1.6);
+                    myBitmapImage.DecodePixelWidth = (int) (face.FaceRectangle.Width * FILTER_RESIZE_FACTOR);
 
                     myBitmapImage.EndInit();
 
@@ -114,13 +134,20 @@ namespace FaceTutorial
                     using (Graphics gr = Graphics.FromImage(imageBackground))
                     {
                         gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));gr.DrawImage(filterBitmap, (face.FaceRectangle.Left + (face.FaceRectangle.Width / 2)) - (filterBitmap.Width / 2), (face.FaceRectangle.Top + (face.FaceRectangle.Height / 2)) - (filterBitmap.Height / 2));
-                        imageBackground.Save("output2" /*+ i*/ + ".png", ImageFormat.Png);
+                        try
+                        {
+                            imageBackground.Save("output.png", ImageFormat.Png);
+                        }
+                        catch(Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
                     }
                 }
 
                 drawingContext.Close();
 
-                Uri outputUri = new Uri(Directory.GetCurrentDirectory() + "/output2.png");
+                Uri outputUri = new Uri(Directory.GetCurrentDirectory() + "/output.png");
                 BitmapImage outputBitmap = new BitmapImage();
 
                 outputBitmap.BeginInit();

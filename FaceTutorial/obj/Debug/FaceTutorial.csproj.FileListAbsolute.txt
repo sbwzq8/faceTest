@@ -21,3 +21,25 @@ c:\users\minitron\source\repos\FaceTutorial\FaceTutorial\obj\Debug\FaceTutorial.
 c:\users\minitron\source\repos\FaceTutorial\FaceTutorial\obj\Debug\FaceTutorial.csproj.CoreCompileInputs.cache
 c:\users\minitron\source\repos\FaceTutorial\FaceTutorial\obj\Debug\FaceTutorial.exe
 c:\users\minitron\source\repos\FaceTutorial\FaceTutorial\obj\Debug\FaceTutorial.pdb
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\bin\Debug\FaceTutorial.exe.config
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\bin\Debug\FaceTutorial.exe
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\bin\Debug\FaceTutorial.pdb
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\bin\Debug\Microsoft.ProjectOxford.Common.dll
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\bin\Debug\Microsoft.ProjectOxford.Face.dll
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\bin\Debug\System.Net.Http.Extensions.dll
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\bin\Debug\System.Net.Http.Primitives.dll
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\bin\Debug\System.Net.Http.Extensions.xml
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\bin\Debug\System.Net.Http.Primitives.xml
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\obj\Debug\FaceTutorial.csproj.App.config
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\obj\Debug\FaceTutorial.csprojResolveAssemblyReference.cache
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\obj\Debug\MainWindow.baml
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\obj\Debug\MainWindow.g.cs
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\obj\Debug\App.g.cs
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\obj\Debug\FaceTutorial_MarkupCompile.cache
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\obj\Debug\FaceTutorial.g.resources
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\obj\Debug\FaceTutorial.Properties.Resources.resources
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\obj\Debug\FaceTutorial.csproj.GenerateResource.Cache
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\obj\Debug\FaceTutorial.exe
+C:\Users\Andy\Documents\Visual Studio 2017\Projects\faceTest\FaceTutorial\obj\Debug\FaceTutorial.pdb
