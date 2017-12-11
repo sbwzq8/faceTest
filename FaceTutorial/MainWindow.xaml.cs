@@ -36,6 +36,7 @@ namespace FaceTutorial
         List<Face> faceList = new List<Face>();
         double resizeFactor;            // The resize factor for the displayed image.
 
+        int j = 0;
         const double FILTER_RESIZE_FACTOR = 1.6;
 
         public MainWindow()
@@ -136,7 +137,7 @@ namespace FaceTutorial
                         gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));gr.DrawImage(filterBitmap, (face.FaceRectangle.Left + (face.FaceRectangle.Width / 2)) - (filterBitmap.Width / 2), (face.FaceRectangle.Top + (face.FaceRectangle.Height / 2)) - (filterBitmap.Height / 2));
                         try
                         {
-                            imageBackground.Save("output.png", ImageFormat.Png);
+                            imageBackground.Save("output" + j + ".png", ImageFormat.Png);
                         }
                         catch(Exception ex)
                         {
@@ -147,9 +148,9 @@ namespace FaceTutorial
 
                 drawingContext.Close();
 
-                Uri outputUri = new Uri(Directory.GetCurrentDirectory() + "/output.png");
+                Uri outputUri = new Uri(Directory.GetCurrentDirectory() + "/output" + j + ".png");
                 BitmapImage outputBitmap = new BitmapImage();
-
+                
                 outputBitmap.BeginInit();
                 outputBitmap.CacheOption = BitmapCacheOption.None;
                 outputBitmap.UriSource = outputUri;
@@ -157,6 +158,7 @@ namespace FaceTutorial
 
                 FacePhoto.Source = outputBitmap;
             }
+            j++;
         }
 
         // Displays the face description when the mouse is over a face rectangle.
