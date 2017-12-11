@@ -37,7 +37,9 @@ namespace FaceTutorial
         double resizeFactor;            // The resize factor for the displayed image.
 
         int j = 0;
-        const double FILTER_RESIZE_FACTOR = 1.6;
+        double FILTER_RESIZE_FACTOR = 1.6;
+        int xreposition = 0;
+        int yreposition = 0;
 
         public MainWindow()
         {
@@ -71,6 +73,8 @@ namespace FaceTutorial
 
             result = openDlg.ShowDialog(this);
 
+            string currentDirectory = Directory.GetCurrentDirectory();
+
             // Return if canceled.
             if (!(bool)result)
             {
@@ -79,6 +83,40 @@ namespace FaceTutorial
 
             // Display the image file.
             string filterFilePath = openDlg.FileName;
+            //MessageBox.Show(filterFilePath);
+            //MessageBox.Show(currentDirectory);
+
+            if(filterFilePath == currentDirectory + "\\snap2.png")
+            {
+                FILTER_RESIZE_FACTOR = 1.6;
+                xreposition = 0;
+                yreposition = 0;
+            }
+            if(filterFilePath == currentDirectory + "\\wreath.png")
+            {
+                FILTER_RESIZE_FACTOR = 3;
+                xreposition = 0;
+                yreposition = 0;
+            }
+            if(filterFilePath == currentDirectory + "\\bwabbit.png")
+            {
+                FILTER_RESIZE_FACTOR = 2.4;
+                xreposition = 0;
+                yreposition = 120;
+            }
+            if(filterFilePath == currentDirectory + "\\glasses.png")
+            {
+                FILTER_RESIZE_FACTOR = 1;
+                xreposition = 0;
+                yreposition = 50;
+            }
+            else
+            if(filterFilePath == currentDirectory + "\\dog.png")
+            {
+                FILTER_RESIZE_FACTOR = 2;
+                xreposition = 0;
+                yreposition = 0;
+            }
 
             Uri fileUri = new Uri(filePath);
             BitmapImage bitmapSource = new BitmapImage();
@@ -134,7 +172,7 @@ namespace FaceTutorial
 
                     using (Graphics gr = Graphics.FromImage(imageBackground))
                     {
-                        gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));gr.DrawImage(filterBitmap, (face.FaceRectangle.Left + (face.FaceRectangle.Width / 2)) - (filterBitmap.Width / 2), (face.FaceRectangle.Top + (face.FaceRectangle.Height / 2)) - (filterBitmap.Height / 2));
+                        gr.DrawImage(imageBackground, new System.Drawing.Point(0, 0));gr.DrawImage(filterBitmap, (face.FaceRectangle.Left + (face.FaceRectangle.Width / 2)) - (filterBitmap.Width / 2) - xreposition, (face.FaceRectangle.Top + (face.FaceRectangle.Height / 2)) - (filterBitmap.Height / 2) - yreposition);
                         try
                         {
                             imageBackground.Save("output" + j + ".png", ImageFormat.Png);
